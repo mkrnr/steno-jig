@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Steno Jig</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+  <script src="resources/js/papaparse.min.js"></script>
+  <script src="rope-word-sets.js"></script>
+	<script src="type-jig.js"></script>
+	<script src="util.js"></script>
+	<script src="word-drill.js"></script>
+	<script src="number-sentences.js"></script>
+	<script src="steno-display.js"></script>
+	<script src="plover-translations.js"></script>
+	<link rel="stylesheet" type="text/css" href="font-roboto.css">
+</head>
+<body>
+
+<div id="form" class="wrapper">
+	<h1>Choose a drill...</h1>
+
+	<div class="form-section">
+		<div class="caption">Most used <strong>words</strong> (once, in random order)</div>
+
+		<form class="drill-options" action="rope.html">
+			<input type="hidden" name="drill" value="ROPE NGSL">
+			<input type="hidden" name="type" value="shuffled">
+
+			Drill
+			<input type="number" name="count" value="100">
+			words starting at rank
+			<input type="number" name="first" value="1">
+			<br>
+
+			<div name="hints">
+				<label><input type="checkbox" name="hints" value="1" checked>Show hints</label>
+			</div>
+
+			<button id="ngslButton">Start Drill &rarr;</button>
+		</form>
+	</div>
+</div>
+
+<div id="lesson" class="wrapper" style="display: none">
+	<h3 id="lesson-name" class="center"></h3>
+	<div id="drill-content">
+		<div id="answer"></div>
+		<div id="exercise"></div>
+	</div>
+
+	<div id="nav">
+		<p id="strokes"></p>
+		<p id="clock" class="clock"></p>
+
+		<p class="center"><a id="back">&larr; Back to Menu</a></p>
+		<p class="center"><a id="again">&#8634; Restart</a></p>
+	</div>
+
+	<textarea id="input"></textarea>
+</div>
+
+<script>
+window.onload = function() {
+	if(document.location.search !== '') {
+    //TODO less ugly solution...
+    if(typeof TypeJig.WordSets['ROPE NGSL'] == 'undefined'){
+      document.getElementById("ngslButton").textContent="Loading...";
+      setTimeout(function(){
+        location.reload();
+      }, 2000);
+    };
+		var fields = parseQueryString(document.location.search);
+		if(fields.drill === 'NumberSentences') exercise = numberSentences(fields);
+		else exercise = wordDrill(fields);
+		if(exercise) {
+			if(fields.hints) {
+				var strokes = document.getElementById('strokes');
+				if(fields.floating_hints) {
+					strokes.style.position = 'fixed';
+				}
+				var translations = TypeJig.shortestTranslations(TypeJig.Translations.Plover);
+				var hints = new StenoDisplay(strokes, translations, true);
+			}
+
+			display_only('lesson');
+			var jig = setExercise(exercise.name, exercise, hints);
+		}
+	}
+}
+
+function display_only(show) {
+	var i, tabs
+	tabs = ['form', 'lesson']
+	for (i in tabs) {
+		document.getElementById(tabs[i]).style.display = tabs[i] === show ? 'block' : 'none'
+	}
+}
+</script>
+
+</body>
+</html>

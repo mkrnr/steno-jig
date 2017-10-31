@@ -20,11 +20,11 @@ function wordDrill(params) {
 
 	var timeLimit = 0;
 
-	var first = +params.first || 0;
+	var first = +params.first || 1;
 	var count = +params.count || words.length;
-	if(first !== 0 || count !== words.length) {
-		words = words.slice(first, first+count);
-		name += ' ' + first + ' to ' + (first+count);
+	if(first !== 1 || count !== words.length) {
+		words = words.slice(first-1, first-1+count);
+		name += ' ' + first + ' to ' + (first-1+count);
 	}
 	var randomly = (params.type === 'randomly');
 
