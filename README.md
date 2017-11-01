@@ -4,7 +4,7 @@ Steno Jig
 This is a little browser-based widget for typing drills. It was
 written by Joshua Grams and I'll just add a little to it. You can
 find the original at: https://joshuagrams.github.io/steno-jig/
-My version is at: https://mkrnr.github.io/steno-jig/
+My version is at: https://mkrnr.com/steno-jig/
 
 `index.html` has the basic structure you need to use it: for basic
 exercises you can pass an array of strings (each of which *must*
